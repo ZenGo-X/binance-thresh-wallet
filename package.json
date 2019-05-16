@@ -2,7 +2,7 @@
   "name": "@kzen-networks/binance-thresh-wallet",
   "version": "0.1.2",
   "description": "Wallet for Binance chain powered by two-party ECDSA",
-  "main": "dist/lib/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
