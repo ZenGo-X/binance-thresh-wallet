@@ -11,7 +11,7 @@ Server (acts as the co-signer in the two-party signing protocol):
 ```js
 const { BncThreshSigServer} = require('@kzen-networks/binance-thresh-wallet');
 const server = new BncThreshSigServer();
-server.launchServer();
+server.launch();
 ```
 
 Client:
