@@ -15,7 +15,7 @@
     "@types/node": "^12.0.0",
     "babel-polyfill": "^6.26.0",
     "crypto-js": "^3.1.9-1",
-    "@kzen/thresh-sig": "^0.1.0",
+    "@kzen-networks/thresh-sig": "^0.1.0",
     "typescript": "^3.4.5"
   },
   "devDependencies": {
