@@ -1,0 +1,33 @@
+{
+  "name": "@kzen-networks/binance-thresh-wallet",
+  "version": "0.1.0",
+  "description": "Wallet for Binance chain powered by two-party ECDSA",
+  "main": "dist/lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "test": "mocha --timeout=5000",
+    "start-p1-server": "cd ./node_modules/@kzen-networks/thresh-sig/ && npm run start-p1-server"
+  },
+  "dependencies": {
+    "@binance-chain/javascript-sdk": "^2.11.0",
+    "@types/crypto-js": "^3.1.43",
+    "@types/node": "^12.0.0",
+    "babel-polyfill": "^6.26.0",
+    "crypto-js": "^3.1.9-1",
+    "@kzen/thresh-sig": "^0.1.0",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-mocha": "^6.0.0"
+  },
+  "engines": {
+    "node": ">= 8.9.0"
+  },
+  "author": "Oded Leiba <oded@kzencorp.com>",
+  "license": "GPL-3.0"
+}
