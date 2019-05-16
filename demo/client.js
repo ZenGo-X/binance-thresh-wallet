@@ -1,4 +1,4 @@
-const BncThreshSigClient = require('../dist/src').BncThreshSigClient;
+const {BncThreshSigClient} = require('../dist/src');
 
 (async () => {
     const client = new BncThreshSigClient();

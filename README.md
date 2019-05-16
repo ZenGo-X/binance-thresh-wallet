@@ -2,26 +2,21 @@ Binance chain threshold wallet
 =====================================
 Binance chain wallet powered by two-party ECDSA.
 
-### Installation:
+## Installation:
 ```
 $ npm install @kzen-networks/binance-thresh-wallet
 ```
-### Build:
-```
-$ npm run build
-```
-### Start party one's server:
-(acts as the co-signer in the two-party signature scheme):
-```
-$ npm run start-p1-server
-```
-### Test:
-```
-$ npm test
-```
-### Example:
+## Usage:
+Server (acts as the co-signer in the two-party signing protocol):
 ```js
-const BncThreshSigClient = require('@kzen-networks/binance-thresh-wallet').BncThreshSigClient;
+const { BncThreshSigServer} = require('@kzen-networks/binance-thresh-wallet');
+const server = new BncThreshSigServer();
+server.launchServer();
+```
+
+Client:
+```js
+const { BncThreshSigClient } = require('@kzen-networks/binance-thresh-wallet');
 
 (async () => {
     const client = new BncThreshSigClient();

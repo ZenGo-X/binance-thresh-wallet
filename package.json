@@ -9,7 +9,7 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "test": "mocha --timeout=5000",
-    "start-p1-server": "cd ./node_modules/@kzen-networks/thresh-sig/ && npm run start-p1-server"
+    "start-server": "node ./demo/server.js"
   },
   "dependencies": {
     "@binance-chain/javascript-sdk": "^2.11.0",
