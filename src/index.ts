@@ -1,11 +1,10 @@
-import {Party2, Party2Share, Signature} from '@kzen/thresh-sig';
+import {Party2, Party2Share, Signature} from '@kzen-networks/thresh-sig';
 import 'babel-polyfill';
 const bncClient = require('@binance-chain/javascript-sdk');
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-const FE_BYTES_SIZE = 32;
 const GOTHAM_ENDPOINT = 'http://localhost:8000';
 const HD_COIN_INDEX = 0;
 const PARTY2_SHARE_PATH = path.join(__dirname, '../../p2-share.json');

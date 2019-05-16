@@ -59,7 +59,6 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
         expect(account.result.address).to.eq(address);
         expect(account.result.account_number).to.be.a('number');
         expect(account.result.balances).to.be.an('array');
-        expect(Buffer.from(account.result.public_key).toString('hex').length).to.eq(66);
     });
 
     it('get balance for address', async () => {
