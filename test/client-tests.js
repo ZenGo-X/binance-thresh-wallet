@@ -1,4 +1,5 @@
-const { BncThreshSigClient } = require('../dist/src');
+const path = require('path');
+const { BncThreshSigClient } = require(path.join(__dirname, '../dist/src'));
 const expect = require('chai').expect;
 const { exec } = require('child_process');
 
@@ -8,10 +9,9 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
 
     before(async () => {
         console.error = () => {};  // suppress error logs in test to keep it clean
-        server = exec('npm run start-server');
+        server = exec(path.join(__dirname, '../demo/server'));
         client = new BncThreshSigClient();
-        await client.initChain();
-        await client.initMasterKey();
+        await client.init();
     });
 
     after(() => {

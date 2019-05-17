@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+
+const {BncThreshSigClient} = require('../dist/src');
+const client = new BncThreshSigClient();
+
+const program = require('commander');
+
+program
+    .command('address')
+    .option('-i, --index', 'Address index')
+    .action(async (cmd) => {
+        await client.init();
+        const address = client.getAddress(cmd.index);
+        console.log(address);
+    });
+
+program
+    .command('balance <address>')
+    .action(async (address) => {
+        await client.init();
+        const balance = await client.getBalance(address);
+        console.log(balance);
+    });
+
+program
+    .command('transfer <from> <to> <amount>')
+    .option('-m, --memo <text>')
+    .action(async (from, to, amount, options) => {
+        await client.init();
+        const transferResponse = await client.transfer(from, to, parseFloat(amount), 'BNB', options.memo);
+        console.log(transferResponse);
+    });
+
+program.parse(process.argv);

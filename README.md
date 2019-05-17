@@ -22,8 +22,7 @@ const { BncThreshSigClient } = require('@kzen-networks/binance-thresh-wallet');
     const client = new BncThreshSigClient();
     
     // initialize
-    await client.initChain();
-    await client.initMasterKey();
+    await client.init();
     
     const address = client.getAddress();
     console.log(address);
@@ -42,3 +41,26 @@ const { BncThreshSigClient } = require('@kzen-networks/binance-thresh-wallet');
     // {"result":[{"code":0,"hash":"DD505FB142B473471D969BA278E82548BEDD637FEC3A3ED6350408B34A74DB9E","height":"","log":"Msg 0: ","ok":true}],"status":200}
 })();
 ```
+## Demo:
+You can also use a demo using the command line.<br>
+Server:
+```bash
+$ demo/server
+```
+Client:
+```bash
+$ demo/client --help
+
+Usage: client [options] [command]
+
+Options:
+  -h, --help                               output usage information
+
+Commands:
+  address [options]
+  balance <address>
+  transfer [options] <from> <to> <amount>
+
+```
+|![Demo](https://raw.githubusercontent.com/KZen-networks/binance-thresh-wallet/master/demo/binance-tss-demo.gif "Binance Threshold Wallet Demo")|
+|:--:|
