@@ -64,4 +64,3 @@ Commands:
 ```
 |![Demo](https://raw.githubusercontent.com/KZen-networks/binance-thresh-wallet/master/demo/binance-tss-demo.gif "Binance Threshold Wallet Demo")|
 |:--:|
-
