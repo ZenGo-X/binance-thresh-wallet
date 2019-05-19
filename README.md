@@ -1,6 +1,7 @@
 Binance chain threshold wallet
 =====================================
 Binance chain wallet powered by two-party ECDSA.
+Soon to be integrated into the ZenGo iOS wallet (www.zengo.com)
 
 ## Installation:
 ```
