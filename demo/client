@@ -7,10 +7,10 @@ const program = require('commander');
 
 program
     .command('address')
-    .option('-i, --index', 'Address index')
-    .action(async (cmd) => {
+    .option('-i, --index <index>', 'Address index')
+    .action(async (options) => {
         await client.init();
-        const address = client.getAddress(cmd.index);
+        const address = client.getAddress(options.index);
         console.log(address);
     });
 
