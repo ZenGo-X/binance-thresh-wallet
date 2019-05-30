@@ -25,9 +25,10 @@ program
 program
     .command('transfer <from> <to> <amount>')
     .option('-m, --memo <text>')
+    .option('-a, --asset <text>')
     .action(async (from, to, amount, options) => {
         await client.init();
-        const transferResponse = await client.transfer(from, to, parseFloat(amount), 'BNB', options.memo);
+        const transferResponse = await client.transfer(from, to, parseFloat(amount), options.asset || 'BNB', options.memo);
         console.log(transferResponse);
     });
 
