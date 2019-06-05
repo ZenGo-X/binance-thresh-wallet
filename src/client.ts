@@ -67,6 +67,40 @@ export class BncThreshSigClient {
     }
 
     /**
+     * Place an order.
+     * @param {String} address. If address is omitted, will use the default address (of index 0)
+     * @param {String} symbol the market pair
+     * @param {Number} side (1-Buy, 2-Sell)
+     * @param {Number} price
+     * @param {Number} quantity
+     * @param {Number} sequence optional sequence
+     * @param {Number} timeinforce (1-GTC(Good Till Expire), 3-IOC(Immediate or Cancel))
+     * @return {Promise} resolves with response (success or fail)
+     */
+    public async placeOrder(address: string, symbol: string, side: number, price: number, quantity: number, sequence = null, timeinforce = 1) {
+        if (!address) {
+            address = this.getAddress(0);
+        }
+        return this.bncClient.placeOrder(address, symbol, side, price, quantity, null, timeinforce);
+    }
+
+    /**
+     * Cancel an order.
+     * @param {String} address. If address is omitted, will use the default address (of index 0)
+     * @param {String} symbol the market pair
+     * @param {String} refid the order ID of the order to cancel
+     * @param {Number} sequence optional sequence
+     * @return {Promise} resolves with response (success or fail)
+     */
+    public async CancelOrder(address: string, symbol: string, refid: string, sequence = null){
+        if (!address) {
+            address = this.getAddress(0);
+        }
+        return this.bncClient.cancelOrder(address, symbol, refid, sequence)
+    }
+
+
+    /**
      * get account of specified address. If address is omitted, will use the default address (of index 0).
      * @param {String} address
      * @return {Promise} resolves with http response
