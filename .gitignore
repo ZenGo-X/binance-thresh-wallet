@@ -1,3 +1,5 @@
 db/
 client_db/
 .idea/
+node_modules/
+dist/
