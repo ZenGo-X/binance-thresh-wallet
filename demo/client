@@ -32,4 +32,27 @@ program
         console.log(transferResponse);
     });
 
+program
+    .command('buy_order <symbol> <price> <quantity>') // buy_order LCQ-AC5_BNB 0.001 10
+    .action(async (symbol, price, quantity) => {
+        await client.init();
+        const transferResponse = await client.placeOrder(null, symbol,1,parseFloat(price),parseFloat(quantity));
+        console.log(transferResponse);
+    });
+program
+    .command('sell_order <symbol> <price> <quantity>')
+    .action(async (symbol, price, quantity) => {
+        await client.init();
+        const transferResponse = await client.placeOrder(null, symbol,2,parseFloat(price),parseFloat(quantity));
+        console.log(transferResponse);
+    });
+
+program
+    .command('cancel_order <symbol> <ref_id>')
+    .action(async (symbol, ref_id) => {
+        await client.init();
+        const transferResponse = await client.CancelOrder(null, symbol, ref_id);
+        console.log(transferResponse);
+    });
+
 program.parse(process.argv);

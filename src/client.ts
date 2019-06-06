@@ -54,7 +54,7 @@ export class BncThreshSigClient {
 
     /**
      * Transfer tokens from one address to another.
-     * @param {String} fromAddress
+     * @param {String} fromAddress - if null, will use the default address (of index 0)
      * @param {String} toAddress
      * @param {Number} amount
      * @param {String} asset
@@ -62,19 +62,47 @@ export class BncThreshSigClient {
      * @param {Number} sequence optional sequence
      * @return {Promise} resolves with response (success or fail)
      */
-    public async transfer(fromAddress: string, toAddress: string, amount: number, asset: string, memo='', sequence=null) {
+    public async transfer(fromAddress: string | null, toAddress: string, amount: number, asset: string, memo='', sequence=null) {
+        fromAddress = fromAddress || this.getAddress(0);
         return this.bncClient.transfer(fromAddress, toAddress, amount, asset, memo, sequence);
     }
+
+    /**
+     * Place an order.
+     * @param {String} address. If address is null, will use the default address (of index 0)
+     * @param {String} symbol the market pair
+     * @param {Number} side (1-Buy, 2-Sell)
+     * @param {Number} price
+     * @param {Number} quantity
+     * @param {Number} sequence optional sequence
+     * @param {Number} timeinforce (1-GTC(Good Till Expire), 3-IOC(Immediate or Cancel))
+     * @return {Promise} resolves with response (success or fail)
+     */
+    public async placeOrder(address: string | null, symbol: string, side: number, price: number, quantity: number, sequence = null, timeinforce = 1) {
+        address = address || this.getAddress(0);
+        return this.bncClient.placeOrder(address, symbol, side, price, quantity, null, timeinforce);
+    }
+
+    /**
+     * Cancel an order.
+     * @param {String} address. If address is null, will use the default address (of index 0)
+     * @param {String} symbol the market pair
+     * @param {String} refid the order ID of the order to cancel
+     * @param {Number} sequence optional sequence
+     * @return {Promise} resolves with response (success or fail)
+     */
+    public async cancelOrder(address: string | null, symbol: string, refid: string, sequence = null){
+        address = address || this.getAddress(0);
+        return this.bncClient.cancelOrder(address, symbol, refid, sequence)
+    }
+
 
     /**
      * get account of specified address. If address is omitted, will use the default address (of index 0).
      * @param {String} address
      * @return {Promise} resolves with http response
      */
-    public async getAccount(address?: string) {
-        if (!address) {
-            address = this.getAddress(0);
-        }
+    public async getAccount(address: string = this.getAddress(0)) {
         return this.bncClient.getAccount(address);
     }
 
