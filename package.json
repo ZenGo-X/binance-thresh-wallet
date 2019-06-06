@@ -9,7 +9,7 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "test": "mocha --timeout=5000",
-    "start-server": "node ./demo/server.js"
+    "start-server": "demo/server"
   },
   "dependencies": {
     "@binance-chain/javascript-sdk": "^2.11.0",
