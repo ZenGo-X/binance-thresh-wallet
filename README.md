@@ -61,6 +61,9 @@ Commands:
   address [options]
   balance <address>
   transfer [options] <from> <to> <amount>
+  buy_order <symbol> <price> <quantity>
+  sell_order <symbol> <price> <quantity>
+  cancel_order <symbol> <ref_id>
 
 ```
 |![Demo](https://raw.githubusercontent.com/KZen-networks/binance-thresh-wallet/master/demo/binance-tss-demo.gif "Binance Threshold Wallet Demo")|
