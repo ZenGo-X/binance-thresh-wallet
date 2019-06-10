@@ -24,12 +24,29 @@ program
 
 program
     .command('transfer <from> <to> <amount>')
-    .option('-m, --memo <text>')
-    .option('-a, --asset <text>')
+    .option('-m, --memo <memo>')
+    .option('-a, --asset <asset>')
     .action(async (from, to, amount, options) => {
         await client.init();
         const transferResponse = await client.transfer(from, to, parseFloat(amount), options.asset || 'BNB', options.memo);
         console.log(transferResponse);
+    });
+
+program
+    .command('transactions')
+    .option('-a --address <address>')
+    .option('-b --blockHeight <blockHeight>')
+    .option('-s --startTime <startTime>', 'start time in Milliseconds (max 3 months ago)')
+    .option('-e --endTime <endTime>', 'end time in Milliseconds')
+    .option('-l --limit <limit>')
+    .option('-o --offset <offset>')
+    .option('-d --side <side>', 'transaction side, Allowed values: [RECEIVE, SEND]')
+    .option('-a --asset <asset>')
+    .option('-t --txType <txType>', 'transaction type. Allowed values: NEW_ORDER,ISSUE_TOKEN,BURN_TOKEN,LIST_TOKEN,CANCEL_ORDER,FREEZE_TOKEN,UN_FREEZE_TOKEN,TRANSFER,PROPOSAL,VOTE,MINT,DEPOSIT]')
+    .action(async (options) => {
+        await client.init();
+        const txs = await client.getTransactions(options);
+        console.log(JSON.stringify(txs, null, 2));
     });
 
 program
@@ -39,6 +56,7 @@ program
         const transferResponse = await client.placeOrder(null, symbol,1,parseFloat(price),parseFloat(quantity));
         console.log(transferResponse);
     });
+
 program
     .command('sell_order <symbol> <price> <quantity>')
     .action(async (symbol, price, quantity) => {

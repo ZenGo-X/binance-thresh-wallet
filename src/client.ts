@@ -2,17 +2,32 @@ import {Party2, Party2Share, Signature} from '@kzen-networks/thresh-sig';
 import 'babel-polyfill';
 const bncClient = require('@binance-chain/javascript-sdk');
 import crypto from 'crypto';
-import fs, {existsSync} from 'fs';
+import fs from 'fs';
 import path from 'path';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
-
 
 const P1_ENDPOINT = 'http://localhost:8000';
 const HD_COIN_INDEX = 0;
 const CLIENT_DB_PATH = path.join(__dirname, '../../client_db');
 const BINANCE_CHAIN_URL_MAINNET = 'https://dex.binance.org/';
 const BINANCE_CHAIN_URL_TESTNET = 'https://testnet-dex.binance.org';
+
+const api = {
+    getTransactions: '/api/v1/transactions'
+};
+
+interface GetTransactionsOptions {
+    address?: string;
+    blockHeight?: number;
+    startTime?: number;
+    endTime?: number;
+    limit?: number;
+    offset?: number;
+    side?: string;
+    txAsset?: string;
+    txType?: string;
+}
 
 export class BncThreshSigClient {
     private p2: Party2;
@@ -116,6 +131,19 @@ export class BncThreshSigClient {
             address = this.getAddress(0);
         }
         return this.bncClient.getBalance(address);
+    }
+
+    public async getTransactions(options: GetTransactionsOptions = {}) {
+        const address = options.address || this.getAddress(0);
+        return this.bncClient._httpClient.request("get", `${api.getTransactions}?address=${address}` +
+            (options.blockHeight ? `&blockHeight=${options.blockHeight}` : '') +
+            (options.startTime ? `&startTime=${options.startTime}` : '') +
+            (options.endTime ? `&endTime=${options.endTime}` : '') +
+            (options.limit ? `&limit=${options.limit}` : '') +
+            (options.offset ? `&offset=${options.offset}` : '') +
+            (options.side ? `&side=${options.side}` : '') +
+            (options.txAsset ? `&txAsset=${options.txAsset}` : '') +
+            (options.txType ? `&txType=${options.txType}` : ''));
     }
 
     /**
