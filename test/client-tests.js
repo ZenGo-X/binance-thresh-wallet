@@ -93,4 +93,12 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
         expect(transferResponse.result[0].hash).to.be.a('string');
         expect(transferResponse.result[0].ok).to.eq(true);
     });
+
+    it('get transactions', async () => {
+        const transactionsResponse = await client.getTransactions();
+        expect(transactionsResponse).to.be.an('object');
+        expect(transactionsResponse.result).to.be.an('object');
+        expect(transactionsResponse.result.total).to.be.greaterThan(0);
+        expect(transactionsResponse.result.tx.length).to.be.greaterThan(0);
+    });
 });
