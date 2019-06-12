@@ -1,17 +1,23 @@
 import {Party2, Party2Share, Signature} from '@kzen-networks/thresh-sig';
 import 'babel-polyfill';
 const bncClient = require('@binance-chain/javascript-sdk');
+import WebSocket from 'ws';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
+import {rejects} from "assert";
 
 const P1_ENDPOINT = 'http://localhost:8000';
 const HD_COIN_INDEX = 0;
 const CLIENT_DB_PATH = path.join(__dirname, '../../client_db');
-const BINANCE_CHAIN_URL_MAINNET = 'https://dex.binance.org/';
-const BINANCE_CHAIN_URL_TESTNET = 'https://testnet-dex.binance.org';
+const BINANCE_CHAIN_HOST_MAINNET = 'dex.binance.org';
+const BINANCE_CHAIN_HOST_TESTNET = 'testnet-dex.binance.org';
+const BINANCE_CHAIN_HTTP_URL_MAINNET = `https://${BINANCE_CHAIN_HOST_MAINNET}`;
+const BINANCE_CHAIN_HTTP_URL_TESTNET = `https://${BINANCE_CHAIN_HOST_TESTNET}`;
+const BINANCE_CHAIN_WS_URL_MAINNET = `wss://${BINANCE_CHAIN_HOST_MAINNET}/api/ws`;
+const BINANCE_CHAIN_WS_URL_TESTNET = `wss://${BINANCE_CHAIN_HOST_TESTNET}/api/ws`;
 
 const api = {
     getTransactions: '/api/v1/transactions'
@@ -30,14 +36,17 @@ interface GetTransactionsOptions {
 }
 
 export class BncThreshSigClient {
+    private mainnet: boolean;
     private p2: Party2;
     private p2MasterKeyShare: Party2Share;
     private bncClient: any;
     private db: any;
+    ws: WebSocket;
 
     constructor(mainnet: boolean = false, useAsyncBroadcast: boolean = false) {
-        const url = mainnet ? BINANCE_CHAIN_URL_MAINNET : BINANCE_CHAIN_URL_TESTNET;
-        this.bncClient = new bncClient(url, useAsyncBroadcast);
+        this.mainnet = mainnet;
+        const httpUrl = mainnet ? BINANCE_CHAIN_HTTP_URL_MAINNET : BINANCE_CHAIN_HTTP_URL_TESTNET;
+        this.bncClient = new bncClient(httpUrl, useAsyncBroadcast);
         this.p2 = new Party2(P1_ENDPOINT);
         this.bncClient.setSigningDelegate(this.sign.bind(this));
     }
@@ -48,8 +57,16 @@ export class BncThreshSigClient {
             (async () => {
                 this.initDb();
                 await this.initMasterKey();
-            })(),
+            })()
         ])
+    }
+
+    public async initWebSocket() {
+        const wsUrl = this.mainnet ? BINANCE_CHAIN_WS_URL_MAINNET : BINANCE_CHAIN_WS_URL_TESTNET;
+        this.ws = new WebSocket(wsUrl);
+        return new Promise((resolve) => {
+            this.ws.onopen = resolve;
+        });
     }
 
     /**

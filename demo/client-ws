@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+const {BncThreshSigClient} = require('../dist/src');
+const client = new BncThreshSigClient();
+(async () => {
+    await client.init();
+    await client.initWebSocket();
+    client.ws.onmessage = e => {
+        console.log('onmessage: ', e.data);
+    };
+    const address = client.getAddress();
+    client.ws.send(JSON.stringify({method: 'subscribe', topic: 'transfers', address}), err => {
+        if (err) return console.error('err =', err);
+        console.log(`subscribed to transfers/${address}`);
+    });
+    client.ws.send(JSON.stringify({method: 'subscribe', topic: 'accounts', address}), err => {
+        if (err) return console.error('err =', err);
+        console.log(`subscribed to accounts/${address}`);
+    });
+})();
