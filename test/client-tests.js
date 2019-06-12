@@ -12,6 +12,7 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
         server = exec(path.join(__dirname, '../demo/server'));
         client = new BncThreshSigClient();
         await client.init();
+        await client.initWebSocket();
     });
 
     after(() => {
@@ -83,6 +84,30 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
         const addressTo = 'tbnb1fcczqjxk7hq5fnzyp79vym6e3565ktkh5gy5fw';
         const amount = 0.00001;
         const asset = 'BNB';
+        // subscribe to transfers websocket
+        let hash;
+        client.ws.send(JSON.stringify({method: 'subscribe', topic: 'transfers', address: addressTo}));
+        client.ws.onmessage = e => {
+            const eventData = JSON.parse(e.data);
+            expect(eventData.stream).to.eq('transfers');
+            expect(eventData.data).to.be.an('object');
+            expect(eventData.data.f).to.eq(addressFrom);
+            expect(eventData.data.t).to.be.an('array');
+            expect(eventData.data.t[0].o).to.eq(addressTo);
+            expect(eventData.data.t[0].c).to.be.an('array');
+            expect(eventData.data.t[0].c[0].a).to.eq('BNB');
+            expect(parseFloat(eventData.data.t[0].c[0].A)).to.eq(amount);
+            expect(eventData.data.H).to.be.a('string');
+            expect(eventData.data.H).to.be.lengthOf(64);
+            if (!hash) {
+                hash = eventData.data.H;
+            } else {
+                // reached here after transfer response
+                expect(eventData.data.H).to.eq(hash);
+                client.ws.close(); // to end this test
+            }
+        };
+
         const message = 'take some back';
         const transferResponse = await client.transfer(addressFrom, addressTo, amount, asset, message);
         expect(transferResponse).to.be.an('object');
@@ -90,8 +115,15 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
         expect(transferResponse.result).to.be.an('array');
         expect(transferResponse.result.length).to.be.eq(1);
         expect(transferResponse.result[0].code).to.be.a('number');
-        expect(transferResponse.result[0].hash).to.be.a('string');
         expect(transferResponse.result[0].ok).to.eq(true);
+        expect(transferResponse.result[0].hash).to.be.a('string');
+        if (!hash) {
+            hash = transferResponse.result[0].hash;
+        } else {
+            // reached here after socket event
+            expect(e.data.H).to.eq(hash);
+            client.ws.close(); // to end this test
+        }
     });
 
     it('get transactions', async () => {

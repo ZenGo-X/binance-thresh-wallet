@@ -33,8 +33,7 @@ program
     });
 
 program
-    .command('transactions')
-    .option('-a --address <address>')
+    .command('transactions <address>')
     .option('-b --blockHeight <blockHeight>')
     .option('-s --startTime <startTime>', 'start time in Milliseconds (max 3 months ago)')
     .option('-e --endTime <endTime>', 'end time in Milliseconds')
@@ -43,8 +42,9 @@ program
     .option('-d --side <side>', 'transaction side, Allowed values: [RECEIVE, SEND]')
     .option('-a --asset <asset>')
     .option('-t --txType <txType>', 'transaction type. Allowed values: NEW_ORDER,ISSUE_TOKEN,BURN_TOKEN,LIST_TOKEN,CANCEL_ORDER,FREEZE_TOKEN,UN_FREEZE_TOKEN,TRANSFER,PROPOSAL,VOTE,MINT,DEPOSIT]')
-    .action(async (options) => {
+    .action(async (address, options) => {
         await client.init();
+        options.address = address;
         const txs = await client.getTransactions(options);
         console.log(JSON.stringify(txs, null, 2));
     });
