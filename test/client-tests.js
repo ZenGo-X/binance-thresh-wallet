@@ -9,7 +9,12 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
 
     before(async () => {
         console.error = () => {};  // suppress error logs in test to keep it clean
-        server = exec(path.join(__dirname, '../demo/server'));
+        server = exec('npm run start-server');
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        await sleep(1000); // wait for server to launch
+
         client = new BncThreshSigClient();
         await client.init();
         await client.initWebSocket();
@@ -17,6 +22,7 @@ describe('Binance client tests (make sure to deposit to printed address)', () =>
 
     after(() => {
         server.kill();
+        client.terminate();
     });
 
     it('get address', () => {

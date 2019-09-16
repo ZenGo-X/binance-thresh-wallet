@@ -1,4 +1,4 @@
-import {Party2, Party2Share, Signature} from '@kzen-networks/thresh-sig';
+import {EcdsaParty2 as Party2, EcdsaParty2Share as Party2Share, EcdsaSignature as Signature} from '@kzen-networks/thresh-sig';
 import 'babel-polyfill';
 const bncClient = require('@binance-chain/javascript-sdk');
 import WebSocket from 'ws';
@@ -67,6 +67,10 @@ export class BncThreshSigClient {
         return new Promise((resolve) => {
             this.ws.onopen = resolve;
         });
+    }
+
+    public async terminate() {
+        this.ws.terminate();
     }
 
     /**
